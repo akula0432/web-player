@@ -1,0 +1,75 @@
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+.Home {
+  /* width: 200px; */
+  color: white;
+  border: 2px dashed #ccc;
+  text-align: center;
+  line-height: 200px;
+  font-size: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.Home.drag-over {
+  background-color: #595959;
+}
+
+.waveContainer {
+  width: 100%;
+  height: 50px;
+  margin-bottom: 20px;
+}
+
+.soundEditor {
+}
+
+.controllPanel {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.range {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/*  */
+
+.buttons {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+}
+
+.customSlider {
+  height: 5px;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  cursor: pointer;
+  outline: none;
+  overflow: hidden;
+  border-radius: 15px;
+}
+
+.customSlider::-webkit-slider-runnable-track {
+  height: 15px;
+  background: #ccc;
+  border-radius: 16px;
+}
+
+/* Thumb: webkit */
+.customSlider::-webkit-slider-thumb {
+  /* removing default appearance */
+  -webkit-appearance: none;
+  appearance: none;
+  /* creating a custom design */
+  height: 0px;
+  width: 0px;
+  border-radius: 0px;
+  /*  slider progress trick  */
+  box-shadow: -400px 0 0 400px #cc0000;
+}

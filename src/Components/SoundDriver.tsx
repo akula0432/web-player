@@ -34,16 +34,6 @@ class SoundDriver {
     );
   }
 
-  // public seek(time: number) {
-  //   if (this.isRunning) {
-  //     this.pause();
-  //     this.pausedAt = time;
-  //     this.play();
-  //   } else {
-  //     this.pausedAt = time;
-  //   }
-  // }
-
   public init(parent: HTMLElement | null) {
     return new Promise((resolve, reject) => {
       if (!parent) {
@@ -120,8 +110,7 @@ class SoundDriver {
     }
 
     if (this.isRunning) {
-      // Проверяем, что bufferSource был запущен
-      this.bufferSource.stop(); // Не передаем время остановки, так как оно будет автоматически определено
+      this.bufferSource.stop();
       await this.context.suspend();
       this.pausedAt = reset ? 0 : this.context.currentTime - this.startedAt;
       this.bufferSource.disconnect();

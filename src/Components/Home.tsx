@@ -18,11 +18,11 @@ import "./Home.css";
 const Home = () => {
   const soundController = useRef<undefined | SoundDriver>(undefined);
   const waveContainerRef = useRef<HTMLDivElement>(null);
-  const [volume, setVolume] = useState(0);
   const volRef = useRef<number | undefined>(0);
+  const timeRef = useRef<number | undefined>(0);
+  const [volume, setVolume] = useState(0);
   const [loading, setLoading] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
 
   const handleDrop = useCallback(async (e: React.DragEvent<HTMLDivElement>) => {
@@ -48,30 +48,25 @@ const Home = () => {
     }
   }, []);
 
-  const togglePlayer = useCallback(
-    (type: string) => {
-      return () => {
-        if (type === "play") {
-          soundController.current?.play();
-          const updateCurrentTime = () => {
-            const currentTime = soundController.current?.getCurrentTime() || 0;
+  const togglePlayer = useCallback((type: string) => {
+    return () => {
+      if (type === "play") {
+        soundController.current?.play();
+        const updateCurrentTime = () => {
+          const currentTime = soundController.current?.getCurrentTime() || 0;
 
-            soundController.current?.updateCurrentTimeLine(currentTime);
-            setCurrentTime(currentTime);
-            requestAnimationFrame(updateCurrentTime);
-          };
-          updateCurrentTime();
-          console.log("Play:", currentTime);
-        } else if (type === "stop") {
-          soundController.current?.pause(true);
-        } else {
-          soundController.current?.pause();
-          console.log("Pause", currentTime);
-        }
-      };
-    },
-    [currentTime]
-  );
+          soundController.current?.updateCurrentTimeLine(currentTime);
+          timeRef.current = currentTime;
+          requestAnimationFrame(updateCurrentTime);
+        };
+        updateCurrentTime();
+      } else if (type === "stop") {
+        soundController.current?.pause(true);
+      } else {
+        soundController.current?.pause();
+      }
+    };
+  }, []);
 
   const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -90,12 +85,12 @@ const Home = () => {
   const onVolumeChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const newVolume = Number(event.target.value);
+      console.log(newVolume);
+      // volRef.current = newVolume;
       setVolume(newVolume);
-      if (soundController.current) {
-        soundController.current?.changeVolume(newVolume);
-      }
+      soundController.current?.changeVolume(newVolume);
     },
-    []
+    [volume]
   );
 
   const handleMouseDown = useCallback(() => {
@@ -112,8 +107,7 @@ const Home = () => {
         const duration = soundController.current.getDuration();
         if (duration !== undefined) {
           const newTime = (mouseX / containerRect.width) * duration || 0;
-          console.log("DragTime: ", newTime);
-          setCurrentTime(newTime);
+          timeRef.current = newTime;
 
           soundController.current?.rewindTrack(newTime);
         }
@@ -124,8 +118,8 @@ const Home = () => {
 
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
-    soundController.current?.play(currentTime);
-  }, [handleMouseMove]);
+    soundController.current?.play(timeRef.current);
+  }, []);
 
   useEffect(() => {
     return () => {

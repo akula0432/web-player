@@ -83,9 +83,8 @@ class Drawer {
 
     const triangleGroup = g
       .append("g")
-      .attr("transform", `translate(0, ${-height / 2 - margin.top})`); // Смещаем треугольник над линией времени
+      .attr("transform", `translate(0, ${-height / 2 - margin.top})`);
 
-    // Создаем треугольник
     this.triangle = triangleGroup
       .append("path")
       .attr(
@@ -109,7 +108,7 @@ class Drawer {
       triangle.attr(
         "transform",
         `translate(${xScale((time / duration) * this.parent.clientWidth)},0)`
-      ); // Учитываем начальное время воспроизведения
+      );
     }
   }
 

@@ -41,13 +41,6 @@ class SoundDriver {
         return;
       }
 
-      if (this.bufferSource) {
-        this.bufferSource.addEventListener("timeupdate", () => {
-          const currentTime = this.getCurrentTime();
-          this.updateCurrentTimeLine(currentTime);
-        });
-      }
-
       const reader = new FileReader();
       reader.readAsArrayBuffer(this.audiFile);
       reader.onload = (event: ProgressEvent<FileReader>) =>

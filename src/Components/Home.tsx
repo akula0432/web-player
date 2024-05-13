@@ -20,6 +20,7 @@ const Home = () => {
   const waveContainerRef = useRef<HTMLDivElement>(null);
   const volRef = useRef<number | undefined>(0);
   const timeRef = useRef<number | undefined>(0);
+  const animationFrameRef = useRef<number | undefined>();
   const [volume, setVolume] = useState(0);
   const [loading, setLoading] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
@@ -54,10 +55,14 @@ const Home = () => {
         soundController.current?.play();
         const updateCurrentTime = () => {
           const currentTime = soundController.current?.getCurrentTime() || 0;
-
           soundController.current?.updateCurrentTimeLine(currentTime);
           timeRef.current = currentTime;
-          requestAnimationFrame(updateCurrentTime);
+
+          if (animationFrameRef.current) {
+            cancelAnimationFrame(animationFrameRef.current);
+          }
+
+          animationFrameRef.current = requestAnimationFrame(updateCurrentTime);
         };
         updateCurrentTime();
       } else if (type === "stop") {
